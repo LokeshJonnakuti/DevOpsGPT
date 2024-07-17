@@ -23,7 +23,7 @@ class DevopsGitHub(DevopsInterface):
                 "ref": branch_name
             }
             print(pipeline_url, flush=True)
-            response = requests.post(pipeline_url, json=data, headers=headers)
+            response = requests.post(pipeline_url, json=data, headers=headers, timeout=60)
             print(response, flush=True)
 
             if response.status_code == 204:
@@ -32,7 +32,7 @@ class DevopsGitHub(DevopsInterface):
 
                 # Get the most recent record
                 workflow_url = f"{ciURL}/repos/{repopath}/actions/workflows/{gitWorkflow}/runs"
-                response = requests.get(workflow_url, headers=headers)
+                response = requests.get(workflow_url, headers=headers, timeout=60)
                 #print(response.json())
                 if response.status_code == 200:
                     runs = response.json()["workflow_runs"]
@@ -57,14 +57,14 @@ class DevopsGitHub(DevopsInterface):
             }
             
             run_details_url = f"{ciURL}/repos/{repopath}/actions/runs/{run_id}"
-            run_response = requests.get(run_details_url, headers=headers)
+            run_response = requests.get(run_details_url, headers=headers, timeout=60)
             print(run_response)
             
             if run_response.status_code == 200:
                 print(run_response.json())
                 job_log_url = run_response.json()["jobs_url"]
 
-                run_details = requests.get(job_log_url, headers=headers)
+                run_details = requests.get(job_log_url, headers=headers, timeout=60)
                 if run_details.status_code == 200:
                     # 获取阶段信息
                     jobs = run_details.json()["jobs"]
@@ -111,7 +111,7 @@ class DevopsGitHub(DevopsInterface):
             }
 
             url = f"https://api.github.com/repos/{repopath}/actions/jobs/{job_id}/logs"
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=60)
 
             if response.status_code == 200:
                 logs = response.text
