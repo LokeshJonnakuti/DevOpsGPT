@@ -1,10 +1,10 @@
 import json
-import random
 import re
 import uuid
 import time
 from datetime import datetime, timedelta
 from app.pkgs.tools.llm import chatCompletion
+import secrets
 
 
 def detect_programming_language(file_path):
@@ -117,7 +117,7 @@ def generate_uuid():
     return time_uuid
 
 def generate_launch_code():
-    return str(random.randint(100000, 999999))
+    return str(secrets.SystemRandom().randint(100000, 999999))
 
 def add_days_to_date(input_date_str, days_to_add):
     print("add_days_to_date")
