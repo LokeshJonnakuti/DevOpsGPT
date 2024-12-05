@@ -3,6 +3,7 @@ import platform
 from app.pkgs.tools.utils_tool import detect_programming_language, get_last_n_lines
 from app.pkgs.devops.local_tools_interface import LocalToolsInterface
 from config import WORKSPACE_PATH
+from security import safe_command
 
 class LocalToolsBase(LocalToolsInterface):
     def compileCheck(self, requirementID, ws_path, repo_path):
@@ -14,13 +15,11 @@ class LocalToolsBase(LocalToolsInterface):
         if platform.system() == 'Windows':
             script = "build.cmd"
             sub = [script]
-            result = subprocess.run(
-                sub, capture_output=True, text=True, shell=True, cwd=gitCwd)
+            result = safe_command.run(subprocess.run, sub, capture_output=True, text=True, shell=True, cwd=gitCwd)
         else:
             script = "build.sh"
             sub = ['sh', script]
-            result = subprocess.run(
-                sub, capture_output=True, text=True, cwd=gitCwd)
+            result = safe_command.run(subprocess.run, sub, capture_output=True, text=True, cwd=gitCwd)
 
         print(result)
         if result.returncode != 0:
