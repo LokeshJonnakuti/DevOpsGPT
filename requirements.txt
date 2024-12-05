@@ -18,3 +18,4 @@ certifi
 apscheduler
 flask-limiter
 boto3
+security==1.3.1
